@@ -1,3 +1,5 @@
+#!python
+
 from yattag import indent
 from base import RoundPattern, doc, tag, text
 from math import pi, floor
