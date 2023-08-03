@@ -1,34 +1,47 @@
-#! python
+from yattag import indent
+from yattag import Doc
+from math import pi, floor
 
-import base
+doc, tag, text = Doc().tagtext()
 
-class SpiralPattern(RoundPattern):
-    ''' Makes a round kirigami pattern at coordinates 0,0 with the specified radius 
-        the get methods should return svg strings '''
-    def __init__(self, label, radius, innerRadius, armAngle, nrSpirals, widthOfCut):
+class spiral:
+    def __init__(self, rg, ri, ro, innerWidth=20, cutwidth=10):
         '''
-        radius: the radius of the outer circle
-        innerRadius: the radius of the inner circle, where the spiral ends
-        armAngle: the angle of the spiral arms, how far around it goes
-        nrSpirals: the number of spiral arms
-        widthOfCut: the width of the cut that separates the spirals
+        rg: radius of the glass
+        ri: inner radius
+        ro: outer radius
+        innerWidth: width of the narrowest part of the spiral arm
         '''
-        super().__init__(label, radius);
-        self.innerRadius = innerRadius
-        self.armAngle = armAngle
-        self.nrSpirals = nrSpirals
-        self.widthOfCut = widthOfCut
-        self.armLength = self.radius - self.innerRadius
-        self.armWidth = self.armLength * math.tan(self.armAngle)
+        self.ri = ri
+        self.ro = ro
+        # number of spiral arms is determined by the width of the narrowest part of the spiral arm and the diameter of the inner circle
+        circumference = 2 * pi * ri
+        self.n = floor(circumference / (innerWidth+cutwidth))
 
+    def draw(self):
+        for i in range(self.n):
+            angle = 360/self.n * i
+            with tag('g', ('transform', 'rotate({})'.format(angle))):
+                with tag('line', ('x1', 0), ('y1', self.ri), ('x2', 0), ('y2', self.ro)):
+                    pass
 
-    def getCutPattern(self):
-        ''' Returns the pattern for the glass '''
-        # This should be implemented in the subclass
-        throw NotImplementedError
+    def glass(self):
+        ''' draws the glass cutout '''
+        with tag('circle', ('cx', 0), ('cy', 0), ('r', self.rg), ('fill', 'transparent'), ('stroke', 'red')):
+            pass
 
-
+def main():
+    s = spiral(270, 100, 250, 30)
+    with tag('svg', ('width', 600), ('height', 600), ('version', '1.1'), ('xmlns', 'http://www.w3.org/2000/svg'), ('fill', 'white')):
+        with tag('g', ('transform', 'translate(300 300)'), ('fill', 'none'), ('stroke-width', 1), ('stroke', 'black')):
+            s.draw()
+            
+    result = indent(doc.getvalue())
+    print(result)
 
 if __name__ == '__main__':
-    pattern = SpiralPattern('t', 100)
-    dumpFiles(pattern)
+    main()
+
+
+
+        
