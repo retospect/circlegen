@@ -35,7 +35,12 @@ class Spiral(RoundPattern):
                 ch = int(cw/2)
                 ri = self.ri
                 ro = self.ro
-
+                # https://svg-path-visualizer.netlify.app/
+                # is a nice interactive simulator to play with that
+                # helps to understand the commands for the path used by the svg path d attribute
+                # The syntax is case sensitive, 
+                # - lower case is relative to the current position, 
+                # - upper case is absolute coordinates
                 path = ' '.join( ("M {} {} ".format(ri, -ch),
                             "A {} {} 0 0 1 {} {} ".format(1,1, 0, ro+ch),
                             "L {} {} ".format(0, ro-ch), 
