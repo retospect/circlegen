@@ -42,8 +42,11 @@ def main():
                     #with tag('rect', ('x', 0), ('y', 0), ('width', patternSquare), ('height', patternSquare)):
                     #    pass
                     with tag('g', ('transform', 'translate({}, {})'.format(patternSquare/2, patternSquare/2))):
-                        s = Spiral(2700,100,2500,6)
-                        s.draw()
+                        s = Spiral(2700,100,2500,3)
+                        with tag('g', ('stroke-width', 1)):
+                            s.draw()
+                        with tag('g', ('stroke', 'red')):
+                            s.glass()
 
     result = indent(doc.getvalue())
     print(result)
