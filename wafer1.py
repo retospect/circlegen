@@ -10,8 +10,8 @@ threeInches = int(inch * 3)
 
 def getOffsets(patternSquare=7500):
     maxOffset = floor(threeInches / 2 / patternSquare)
-    for x in range(-maxOffset, maxOffset + 1):
-        for y in range(-maxOffset, maxOffset + 1):
+    for y in range(-maxOffset, maxOffset + 1):
+        for x in range(-maxOffset, maxOffset + 1):
             radius = threeInches / 2 - 1000  # leave a 5mm rim
             # if all the corners are inside the circle, then the square is inside the circle
             if (
@@ -26,12 +26,14 @@ def getOffsets(patternSquare=7500):
                 yield (x, y)
 
 
-def makeLineWafer(show_wafer=False):
+def makeWafer(rounds, show_wafer=False, show_glass=False, show_cuts=False):
     with tag("g", ("transform", "translate(40000 40000))")):
         if show_wafer:
             drawWaferWithFlat()
         patternSquare = 7500
-        for x, y in getOffsets(patternSquare):
+        coords = getOffsets(patternSquare)
+        for circular in rounds:
+            x, y = next(coords)
             with tag(
                 "g",
                 (
@@ -52,9 +54,10 @@ def makeLineWafer(show_wafer=False):
                 ):
                     s = Spiral(2700, 100, 2500, 3)
                     with tag("g", ("stroke-width", 1)):
-                        s.draw()
-                    with tag("g", ("stroke", "red")):
-                        s.glass()
+                        if show_glass:
+                            circular.glass()
+                        if show_cuts:
+                            circular.draw()
 
 
 def main():
@@ -73,11 +76,16 @@ def main():
                     "scale({} {})".format(conversionFactor, conversionFactor),
                 ),
             ):
+                spirals = []
+                for i in range(26):
+                    spirals.append(Spiral(2700, 100, 2500, i + 1))
+
                 with tag("g", ("transform", "translate(47000 105000)")):
-                    makeLineWafer(True)
+                    makeWafer(spirals, show_glass=True, show_wafer=True)
                 with tag("g", ("transform", "translate(105000 47000)")):
+                    # Mirror it because it's going on the back!
                     with tag("g", ("transform", "scale(-1,1)")):
-                        makeLineWafer()
+                        makeWafer(spirals, show_cuts=True, show_wafer=True)
 
     result = indent(doc.getvalue())
     print(result)
