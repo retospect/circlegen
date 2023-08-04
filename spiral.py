@@ -46,7 +46,7 @@ class Spiral(RoundPattern):
 
 
 def main():
-    s = Spiral(2700, 100, 2500, 10)
+    s = Spiral(2700, 100, 2500, 6)
     s.toFirefox()
     result = indent(doc.getvalue())
     print(result)
