@@ -1,6 +1,8 @@
 #! python
+
 from yattag import indent
-from base import RoundPattern, doc, tag, text
+from base import doc, tag, text
+from roundpattern import RoundPattern
 from math import pi, floor
 from svg.path import Path, Move, Line, Arc, CubicBezier, QuadraticBezier, Close
 
