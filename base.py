@@ -38,6 +38,26 @@ class Pattern:
             ):
                 pass
 
+    def toFirefox(self, size=1200):
+        with tag(
+            "svg",
+            ("width", size),
+            ("height", size),
+            ("version", "1.1"),
+            ("xmlns", "http://www.w3.org/2000/svg"),
+            ("fill", "white"),
+        ):
+            with tag(
+                "g",
+                ("transform", "scale(0.2) translate(3000,3000)"),
+                ("fill", "none"),
+                ("stroke-width", 1),
+                ("stroke", "black"),
+            ):
+                self.draw()
+                self.glass()
+                self.scalebar()
+
 
 def dumpFiles(instance):
     """Dumps a specific instance of roundPattern into a file"""
